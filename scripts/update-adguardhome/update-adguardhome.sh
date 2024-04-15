@@ -7,10 +7,17 @@
 # Modified for general OpenWRT usage by nextgen-networks
 # Date: 2024-03-13
 # Updated: 2024-04-15
-SCRIPT_VERSION="2024.04.15.01"
+SCRIPT_VERSION="2024.04.15.02"
 #
 # Usage: ./update-adguardhome.sh [--ignore-free-space]
 # Warning: This script might potentially harm your router. Use it at your own risk.
+#
+echo "---"
+echo -e "\033[31mIMPORTANT: AdGuardHome needs to be installed with the\033[0m"
+echo -e "\033[31mAdGuardHome -s install\033[0m"
+echo -e "\033[31mparameter first!\033[0m"
+echo -e "\033[31mIf it was installed with opkg this script will fail!\033[0m"
+echo "---"
 #
 # Populate variables
 TEMP_FILE="/tmp/AdGuardHome.tar.gz"
@@ -31,9 +38,9 @@ create_persistance_script() {
     # It should be executed after every reboot
     # Author: Admon
     # Date: 2024-03-06
-    if [ -f /etc/init.d/adguardhome ] 
+    if [ -f /etc/init.d/AdGuardHome ] 
     then
-        sed -i '/procd_set_param command \/usr\/bin\/AdGuardHome/ s/--no-check-update //' "/etc/init.d/adguardhome"
+        sed -i '/procd_set_param command \/usr\/bin\/AdGuardHome/ s/--no-check-update //' "/etc/init.d/AdGuardHome"
     else
         echo "Startup script not found. Exiting ..."
         echo "Please report this issue on the GL.iNET forum."
@@ -213,7 +220,7 @@ if [ "$answer" != "${answer#[Yy]}" ]; then
     fi
     # Stop AdGuardHome
     echo "Stopping Adguard Home ..."
-    /etc/init.d/adguardhome stop 2 &>/dev/null
+    /etc/init.d/AdGuardHome stop 2 &>/dev/null
     sleep 2
     # Stop it by killing the process if it's still running
     if pgrep AdGuardHome; then
@@ -228,7 +235,7 @@ if [ "$answer" != "${answer#[Yy]}" ]; then
     rm -rf /tmp/AdGuardHome
     # Restart AdGuardHome
     echo "Restarting AdGuard Home ..."
-    /etc/init.d/adguardhome restart 2 &>/dev/null
+    /etc/init.d/AdGuardHome restart 2 &>/dev/null
     # Make persistance
     echo "The update was successful. Do you want to make the installation permanent?"
     echo "This will make your AdGuard Home config persistant - even after a firmware up-/ or downgrade."
