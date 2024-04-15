@@ -7,7 +7,7 @@
 # Modified for general OpenWRT usage by nextgen-networks
 # Date: 2024-03-13
 # Updated: 2024-04-16
-SCRIPT_VERSION="2024.04.16.03"
+SCRIPT_VERSION="2024.04.16.04"
 #
 # Usage: ./update-adguardhome.sh [--ignore-free-space]
 # Warning: This script might potentially harm your router. Use it at your own risk.
@@ -78,6 +78,10 @@ upgrade_persistance() {
     # If entry /usr/bin/enable-adguardhome-update-check is not found in /etc/sysupgrade.conf
     if ! grep -q "/usr/bin/enable-adguardhome-update-check" /etc/sysupgrade.conf; then
         echo "/usr/bin/enable-adguardhome-update-check" >>/etc/sysupgrade.conf
+    fi
+    # If entry /etc/init.d/AdGuardHome service configuration is not found in /etc/sysupgrade.conf
+    if ! grep -q "/etc/init.d/AdGuardHome" /etc/sysupgrade.conf; then
+        echo "/etc/init.d/AdGuardHome" >>/etc/sysupgrade.conf
     fi
     # If entry /etc/rc.local is not found in /etc/sysupgrade.conf
     if ! grep -q "/etc/rc.local" /etc/sysupgrade.conf; then
@@ -237,6 +241,8 @@ if [ "$answer" != "${answer#[Yy]}" ]; then
     # Remove temporary files
     echo "Removing temporary files ..."
     rm -rf /tmp/AdGuardHome
+    # Reinstall AdGuardHome service in case it was removed by sysupgrade
+    /usr/bin/AdGuardHome -s install
     # Restart AdGuardHome
     echo "Restarting AdGuard Home ..."
     /etc/init.d/AdGuardHome restart 2 &>/dev/null
