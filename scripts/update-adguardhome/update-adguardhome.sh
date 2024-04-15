@@ -222,7 +222,7 @@ if [ "$answer" != "${answer#[Yy]}" ]; then
     if ! [ -f /etc/init.d/AdGuardHome ] ; then
         echo "/etc/init.d/AdGuardHome - not found!"
         echo "should we try to install it? (this may lead to a broken config)"
-        "... did you made a hardcopy backup and should we proceed? (y/N)"
+        echo "... did you made a hardcopy backup and should we proceed? (y/N)"
         read answer_agh_reinstall
         if [ "$answer_agh_reinstall" != "${answer_agh_reinstall#[Yy]}" ]; then
             echo "(re)install AdGuardHome"
