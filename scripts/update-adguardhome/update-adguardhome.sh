@@ -7,7 +7,7 @@
 # Modified for general OpenWRT usage by nextgen-networks
 # Date: 2024-03-13
 # Updated: 2024-04-16
-SCRIPT_VERSION="2024.04.16.01"
+SCRIPT_VERSION="2024.04.16.02"
 #
 # Usage: ./update-adguardhome.sh [--ignore-free-space]
 # Warning: This script might potentially harm your router. Use it at your own risk.
@@ -25,7 +25,7 @@ TEMP_FILE="/tmp/AdGuardHome.tar.gz"
 # Function for backup
 backup() {
     echo "Creating backup of AdGuard Home config ..."
-    tar czf /root/AdGuardHome_backup.tar.gz /etc/AdGuardHome
+    tar czf /root/AdGuardHome_backup.tar.gz /usr/bin/AdGuardHome /usr/bin/AdGuardHome.yaml /usr/bin/data/
     echo "Backup created: /root/AdGuardHome_backup.tar.gz"
 }
 
@@ -216,19 +216,6 @@ if [ "$answer" != "${answer#[Yy]}" ]; then
     else
         echo "AdGuardHome binary not found. Exiting ..."
         echo "Please report this issue on the GL.iNET forum."
-        exit 1
-    fi
-    # Check if AdGuardHome was installed as opkg or via self install script
-    if ! [ -f /etc/init.d/AdGuardHome ] ; then
-        echo "/etc/init.d/AdGuardHome - not found!"
-        echo "should we try to install it? (this may lead to a broken config)"
-        echo "... did you made a hardcopy backup and should we proceed? (y/N)"
-        read answer_agh_reinstall
-        if [ "$answer_agh_reinstall" != "${answer_agh_reinstall#[Yy]}" ]; then
-            echo "(re)install AdGuardHome"
-            /usr/bin/AdGuardHome -s install
-    else
-        echo "Startup script not found or (re)install aborted. Exiting ..."
         exit 1
     fi
     # Stop AdGuardHome
