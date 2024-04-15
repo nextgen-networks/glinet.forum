@@ -7,7 +7,7 @@
 # Modified for general OpenWRT usage by nextgen-networks
 # Date: 2024-03-13
 # Updated: 2024-04-16
-SCRIPT_VERSION="2024.04.16.02"
+SCRIPT_VERSION="2024.04.16.03"
 #
 # Usage: ./update-adguardhome.sh [--ignore-free-space]
 # Warning: This script might potentially harm your router. Use it at your own risk.
@@ -63,13 +63,17 @@ upgrade_persistance() {
     if grep -q "/root/AdGuardHome_backup.tar.gz" /etc/sysupgrade.conf; then
         sed -i "/root\/AdGuardHome_backup.tar.gz/d" /etc/sysupgrade.conf
     fi
-    # If entry "/etc/AdGuardHome" is not found in /etc/sysupgrade.conf
-    if ! grep -q "/etc/AdGuardHome" /etc/sysupgrade.conf; then
-        echo "/etc/AdGuardHome" >>/etc/sysupgrade.conf
+    # If entry "/usr/bin/data" AdGuardHome data-storage is not found in /etc/sysupgrade.conf
+    if ! grep -q "/usr/bin/data" /etc/sysupgrade.conf; then
+        echo "/usr/bin/data" >>/etc/sysupgrade.conf
     fi
-    # If entry /usr/bin/AdGuardHome is not found in /etc/sysupgrade.conf
+    # If entry /usr/bin/AdGuardHome binary is not found in /etc/sysupgrade.conf
     if ! grep -q "/usr/bin/AdGuardHome" /etc/sysupgrade.conf; then
         echo "/usr/bin/AdGuardHome" >>/etc/sysupgrade.conf
+    fi
+        # If entry /usr/bin/AdGuardHome.yaml config file is not found in /etc/sysupgrade.conf
+    if ! grep -q "/usr/bin/AdGuardHome.yaml" /etc/sysupgrade.conf; then
+        echo "/usr/bin/AdGuardHome.yaml" >>/etc/sysupgrade.conf
     fi
     # If entry /usr/bin/enable-adguardhome-update-check is not found in /etc/sysupgrade.conf
     if ! grep -q "/usr/bin/enable-adguardhome-update-check" /etc/sysupgrade.conf; then
