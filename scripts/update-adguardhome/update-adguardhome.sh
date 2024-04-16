@@ -7,7 +7,7 @@
 # Modified for general OpenWRT usage by nextgen-networks
 # Date: 2024-03-13
 # Updated: 2024-04-16
-SCRIPT_VERSION="2024.04.16.06"
+SCRIPT_VERSION="2024.04.16.07"
 #
 # Usage: ./update-adguardhome.sh [--ignore-free-space]
 # Warning: This script might potentially harm your router. Use it at your own risk.
@@ -88,9 +88,9 @@ upgrade_persistance() {
         echo "/etc/rc.local" >>/etc/sysupgrade.conf
     fi
     # If entry update-adguardhome.sh persistance is not found in /etc/sysupgrade.conf
-    SCRIPT_PATH=$(find / -name 'update-adguardhome.sh' ! -path '*/overlay/*')
-    if ! grep -q "$SCRIPT_PATH/update-adguardhome.sh" /etc/sysupgrade.conf; then
-        echo "$SCRIPT_PATH/update-adguardhome.sh" >>/etc/sysupgrade.conf
+    UPDATESCRIPT_PATH=$(find / -name 'update-adguardhome.sh' ! -path '*/overlay/*')
+    if ! grep -q "$UPDATESCRIPT_PATH" /etc/sysupgrade.conf; then
+        echo "$UPDATESCRIPT_PATH" >>/etc/sysupgrade.conf
     fi
 }
 
